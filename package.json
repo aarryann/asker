@@ -7,7 +7,7 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "test": "jest",
+    "test": "jest --findRelatedTests",
     "lint": "eslint \"*/**/*.ts*\""
   },
   "keywords": [],
@@ -55,7 +55,7 @@
     "semi": true,
     "tabWidth": 2
   },
-  "husky": {
+  "husky1": {
     "hooks": {
       "pre-commit": "lint-staged"
     }
@@ -63,8 +63,7 @@
   "lint-staged": {
     "*.+(ts|tsx)": [
       "prettier --write",
-      "git add",
-      "jest --findRelatedTests",
+      "jest",
       "eslint"
     ]
   }

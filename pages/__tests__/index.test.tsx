@@ -3,9 +3,9 @@ import { mount } from 'enzyme';
 import Index from '../index';
 
 describe('index page', () => {
-  it('should have App component', () => {
+  it('should have Layout component', () => {
     const subject = mount(<Index />);
 
-    expect(subject.find('App')).toHaveLength(1);
+    expect(subject.find('Layout')).toHaveLength(1);
   });
 });
