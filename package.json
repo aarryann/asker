@@ -2,6 +2,10 @@
   "name": "asker",
   "version": "0.0.1",
   "description": "Next js tutorial",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/aarryann/asker.git"
+  },
   "main": "index.js",
   "scripts": {
     "dev": "next",
@@ -41,10 +45,8 @@
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.0",
-    "husky": "^4.2.3",
     "jest": "^25.1.0",
     "jest-watch-typeahead": "^0.4.2",
-    "lint-staged": "^10.0.8",
     "prettier": "^1.19.1",
     "typescript": "^3.8.3"
   },
@@ -54,17 +56,5 @@
     "printWidth": 120,
     "semi": true,
     "tabWidth": 2
-  },
-  "husky1": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.+(ts|tsx)": [
-      "prettier --write",
-      "jest",
-      "eslint"
-    ]
   }
 }
