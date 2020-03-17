@@ -7,7 +7,7 @@ import NavBar from './NavBar';
 import styles from './Layout.module.scss';
 
 const Layout = props => {
-  const appTitle = `> WHATABYTE`;
+  const appTitle = '> WHATABYTE';
 
   return (
     <div className={styles.Layout}>
