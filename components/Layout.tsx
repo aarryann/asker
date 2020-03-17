@@ -1,12 +1,16 @@
 // components/Layout.tsx
 
+import { NextPage } from 'next';
 import Head from 'next/head';
 
 import Header from './Header';
 import NavBar from './NavBar';
 import styles from './Layout.module.scss';
 
-const Layout = props => {
+type Props = {
+  children: React.ReactNode;
+};
+const Layout: NextPage<Props> = ({ children }) => {
   const appTitle = '> WHATABYTE';
 
   return (
@@ -18,7 +22,7 @@ const Layout = props => {
       </Head>
 
       <Header appTitle={appTitle} />
-      <div className={styles.Content}>{props.children}</div>
+      <div className={styles.Content}>{children}</div>
       <NavBar />
     </div>
   );
