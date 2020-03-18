@@ -6,6 +6,7 @@ import Head from 'next/head';
 import Header from './Header';
 import NavBar from './NavBar';
 import styles from './Layout.module.scss';
+import navButtons from '../config/buttons';
 
 type Props = {
   children: React.ReactNode;
@@ -23,7 +24,7 @@ const Layout: NextPage<Props> = ({ children }) => {
 
       <Header appTitle={appTitle} />
       <div className={styles.Content}>{children}</div>
-      <NavBar />
+      <NavBar navButtons={navButtons} />
     </div>
   );
 };

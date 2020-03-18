@@ -24,7 +24,7 @@
     text-decoration: none;
   }
 
-  .active {
+  :global(.active) {
     color: $highlight;
   }
 }

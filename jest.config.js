@@ -4,7 +4,7 @@ module.exports = {
     '\\.(scss|css|jpg|png|gif)$': '<rootDir>/pages/__tests__/file.mock.js',
   },
   roots: ['<rootDir>'],
-  setupFiles: ['<rootDir>/config/setup.js'],
+  setupFiles: ['<rootDir>/config/setup.ts'],
   snapshotSerializers: ['enzyme-to-json/serializer'],
   testEnvironment: 'jsdom',
   testPathIgnorePatterns: ['<rootDir>[/\\\\](build|docs|node_modules|.next)[/\\\\]'],
