@@ -1,12 +1,12 @@
 module.exports = {
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json'],
   moduleNameMapper: {
-    '\\.(scss|css|jpg|png|gif)$': '<rootDir>/pages/__tests__/file.mock.js',
+    '\\.(scss|css|jpg|png|gif)$': '<rootDir>/__tests__/file.mock.js',
   },
   roots: ['<rootDir>'],
   setupFiles: ['<rootDir>/config/setup.ts'],
   snapshotSerializers: ['enzyme-to-json/serializer'],
-  testEnvironment: 'jsdom',
+  testEnvironment: 'node',
   testPathIgnorePatterns: ['<rootDir>[/\\\\](build|docs|node_modules|.next)[/\\\\]'],
   testRegex: '/__tests__/.*\\.(test|spec)\\.tsx?$',
   testURL: 'http://localhost',

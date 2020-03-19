@@ -19,7 +19,8 @@
   "env": {
     "es6": true,
     "browser": true,
-    "jest/globals": true
+    "jest/globals": true,
+    "jest": true
   },
   "rules": {
     "import/extensions": [

@@ -1,4 +1,4 @@
 next.config.js
 jest.config.js
 config/setup.js
-pages/__tests__/file.mock.js
+__tests__/file.mock.js
