@@ -6,7 +6,7 @@ module.exports = {
   roots: ['<rootDir>'],
   setupFiles: ['<rootDir>/config/setup.ts'],
   snapshotSerializers: ['enzyme-to-json/serializer'],
-  testEnvironment: 'node',
+  testEnvironment: 'jsdom',
   testPathIgnorePatterns: ['<rootDir>[/\\\\](build|docs|node_modules|.next)[/\\\\]'],
   testRegex: '/__tests__/.*\\.(test|spec)\\.tsx?$',
   testURL: 'http://localhost',
