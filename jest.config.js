@@ -1,7 +1,7 @@
 module.exports = {
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json'],
   moduleNameMapper: {
-    '\\.(scss|css|jpg|png|gif)$': '<rootDir>/__tests__/file.mock.js',
+    '\\.(scss|css|jpg|png|gif)$': '<rootDir>/__mocks__/file.mock.ts',
   },
   roots: ['<rootDir>'],
   setupFiles: ['<rootDir>/config/setup.ts'],
