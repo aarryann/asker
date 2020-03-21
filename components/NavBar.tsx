@@ -1,13 +1,20 @@
 // components/NavBar.tsx
 
+import { NextPage } from 'next';
+import NavButton from './NavButton';
+import { Button } from '../config/buttons';
 import styles from './NavBar.module.scss';
-const navBarStyle = {
-  backgroundColor: 'red',
-  color: 'white',
-  width: '100%',
-  height: '60px',
+
+type Props = {
+  navButtons: Button[];
 };
 
-const NavBar = () => <div className={styles.NavBar}>NAVBAR</div>;
+const NavBar: NextPage<Props> = ({ navButtons }) => (
+  <div className={styles.NavBar}>
+    {navButtons.map(button => (
+      <NavButton key={button.path} path={button.path} label={button.label} icon={button.icon} />
+    ))}
+  </div>
+);
 
 export default NavBar;

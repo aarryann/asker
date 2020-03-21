@@ -1,0 +1,17 @@
+/*
+!/__tests__
+!/components
+!/config
+!/pages
+!/theme
+!/.babelrc
+!/.env
+!/.eslintignore
+!/.eslintrc
+!/Dockerfile
+!/jest.config.js
+!/next.config.js
+!/next-env.d.js
+!/package-lock.json
+!/package.json
+!/tsconfig.json

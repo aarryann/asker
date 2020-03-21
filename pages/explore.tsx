@@ -1,7 +1,8 @@
 // pages/explore.tsx
 
+import { NextPage } from 'next';
 import Layout from '@components/Layout';
 
-const ExploreView = props => <Layout>{`Explore View`}</Layout>;
+const ExploreView: NextPage = () => <Layout>Explore View</Layout>;
 
 export default ExploreView;
