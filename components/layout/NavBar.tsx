@@ -2,7 +2,7 @@
 
 import { NextPage } from 'next';
 import NavButton from './NavButton';
-import { Button } from '../config/buttons';
+import { Button } from '../../config/buttons';
 import styles from './NavBar.module.scss';
 
 type Props = {
