@@ -8,6 +8,7 @@
         "alias": {
           "@components": "./components",
           "@config": "./config",
+          "@lib": "./lib",
           "@pages": "./pages",
           "@public": "./public",
           "@theme": "./theme"
