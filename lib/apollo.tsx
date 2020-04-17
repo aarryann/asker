@@ -1,12 +1,30 @@
 import React from 'react';
 import App from 'next/app';
+import { NextPage, NextPageContext } from 'next';
 import Head from 'next/head';
+import { ApolloClient } from 'apollo-client';
+import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
+import { HttpLink } from 'apollo-link-http';
+import fetch from 'isomorphic-unfetch';
 import { ApolloProvider } from '@apollo/react-hooks';
-import createApolloClient from './apolloClient';
 
 // On the client, we store the Apollo Client in the following variable.
 // This prevents the client from reinitializing between page transitions.
-let globalApolloClient = null;
+let globalApolloClient: ApolloClient<NormalizedCacheObject> | null = null;
+
+export const createApolloClient = (initialState, ctx): ApolloClient<NormalizedCacheObject> => {
+  // The `ctx` (NextPageContext) will only be present on the server.
+  // use it to extract auth headers (ctx.req) or similar.
+  return new ApolloClient({
+    ssrMode: Boolean(ctx),
+    link: new HttpLink({
+      uri: 'https://api.graph.cool/simple/v1/cixmkt2ul01q00122mksg82pn', // Server URL (must be absolute)
+      credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
+      fetch,
+    }),
+    cache: new InMemoryCache().restore(initialState),
+  });
+};
 
 /**
  * Always creates a new apollo client on the server
@@ -14,7 +32,7 @@ let globalApolloClient = null;
  * @param  {NormalizedCacheObject} initialState
  * @param  {NextPageContext} ctx
  */
-const initApolloClient = (initialState, ctx) => {
+const initApolloClient = (initialState, ctx): ApolloClient<NormalizedCacheObject> => {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
   if (typeof window === 'undefined') {
@@ -77,8 +95,25 @@ export const initOnContext = ctx => {
  * @param  {Boolean} [withApolloOptions.ssr=false]
  * @returns {(PageComponent: ReactNode) => ReactNode}
  */
-export const withApollo = ({ ssr = false } = {}) => PageComponent => {
-  const WithApollo = ({ apolloClient, apolloState, ...pageProps }) => {
+
+interface InitPropsI {
+  getInitialProps: (...args) => {};
+}
+interface AppPropsI {
+  apolloClient: ApolloClient<NormalizedCacheObject>;
+}
+
+interface ApolloPropsI {
+  apolloClient: ApolloClient<NormalizedCacheObject>;
+  apolloState: NormalizedCacheObject;
+}
+
+export const withApollo = ({ ssr = false } = {}) => (Page: React.FunctionComponent<AppPropsI> & InitPropsI) => {
+  const WithApollo: React.FunctionComponent<ApolloPropsI> & InitPropsI = ({
+    apolloClient,
+    apolloState,
+    ...pageProps
+  }: ApolloPropsI) => {
     let client;
     if (apolloClient) {
       // Happens on: getDataFromTree & next.js ssr
@@ -90,26 +125,26 @@ export const withApollo = ({ ssr = false } = {}) => PageComponent => {
 
     return (
       <ApolloProvider client={client}>
-        <PageComponent {...pageProps} />
+        <Page apolloClient={client} {...pageProps} />
       </ApolloProvider>
     );
   };
 
   // Set the correct displayName in development
   if (process.env.NODE_ENV !== 'production') {
-    const displayName = PageComponent.displayName || PageComponent.name || 'Component';
+    const displayName = Page.displayName || Page.name || 'Component';
     WithApollo.displayName = `withApollo(${displayName})`;
   }
 
-  if (ssr || PageComponent.getInitialProps) {
+  if (ssr || Page.getInitialProps) {
     WithApollo.getInitialProps = async ctx => {
       const inAppContext = Boolean(ctx.ctx);
       const { apolloClient } = initOnContext(ctx);
 
       // Run wrapped getInitialProps methods
       let pageProps = {};
-      if (PageComponent.getInitialProps) {
-        pageProps = await PageComponent.getInitialProps(ctx);
+      if (Page.getInitialProps) {
+        pageProps = await Page.getInitialProps(ctx);
       } else if (inAppContext) {
         pageProps = await App.getInitialProps(ctx);
       }
