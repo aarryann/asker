@@ -1,9 +1,8 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-
-import withMockRouter from '../../__mocks__/utils.mock';
-import Index from '../../pages/index';
-import Layout from '../../components/Layout';
+import Layout from '@components/layout/Layout';
+import Index from '@pages/index';
+import withMockRouter from '@mocks/utils.mock';
 
 describe('Index', () => {
   let wrapper;

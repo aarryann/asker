@@ -1,5 +1,5 @@
-import React from 'react';
-import App from 'next/app';
+import React, { ReactNode } from 'react';
+import App, { AppContext } from 'next/app';
 import { NextPage, NextPageContext } from 'next';
 import Head from 'next/head';
 import { ApolloClient } from 'apollo-client';
@@ -7,19 +7,20 @@ import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import fetch from 'isomorphic-unfetch';
 import { ApolloProvider } from '@apollo/react-hooks';
+import createApolloClient from './apolloClient';
 
 // On the client, we store the Apollo Client in the following variable.
 // This prevents the client from reinitializing between page transitions.
 let globalApolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 
-export const createApolloClient = (initialState, ctx): ApolloClient<NormalizedCacheObject> => {
+export const createApolloClient2 = (initialState, ctx): ApolloClient<NormalizedCacheObject> => {
   // The `ctx` (NextPageContext) will only be present on the server.
   // use it to extract auth headers (ctx.req) or similar.
   return new ApolloClient({
     ssrMode: Boolean(ctx),
     link: new HttpLink({
-      uri: 'https://api.graph.cool/simple/v1/cixmkt2ul01q00122mksg82pn', // Server URL (must be absolute)
-      credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
+      uri: 'http://localhost:4811/graphql', // Server URL (must be absolute)
+      // credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
       fetch,
     }),
     cache: new InMemoryCache().restore(initialState),
@@ -32,16 +33,20 @@ export const createApolloClient = (initialState, ctx): ApolloClient<NormalizedCa
  * @param  {NormalizedCacheObject} initialState
  * @param  {NextPageContext} ctx
  */
-const initApolloClient = (initialState, ctx): ApolloClient<NormalizedCacheObject> => {
+const initApolloClient = (
+  initialState: NormalizedCacheObject,
+  ctx: NextPageContext
+): ApolloClient<NormalizedCacheObject> => {
+  const token = '6b075baf-a22f-48bd-8dcd-9b235ea23a8f';
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
   if (typeof window === 'undefined') {
-    return createApolloClient(initialState, ctx);
+    return createApolloClient(initialState, ctx, token);
   }
 
   // Reuse client on the client-side
   if (!globalApolloClient) {
-    globalApolloClient = createApolloClient(initialState, ctx);
+    globalApolloClient = createApolloClient(initialState, ctx, token);
   }
 
   return globalApolloClient;
@@ -53,7 +58,7 @@ const initApolloClient = (initialState, ctx): ApolloClient<NormalizedCacheObject
  * inside getStaticProps, getStaticPaths or getServerSideProps
  * @param {NextPageContext | NextAppContext} ctx
  */
-export const initOnContext = ctx => {
+export const initOnContext = (ctx: NextPageContextApp): NextPageContextApp => {
   const inAppContext = Boolean(ctx.ctx);
 
   // We consider installing `withApollo({ ssr: true })` on global App level
@@ -74,6 +79,8 @@ export const initOnContext = ctx => {
   // Otherwise, the component would have to call initApollo() again but this
   // time without the context. Once that happens, the following code will make sure we send
   // the prop as `null` to the browser.
+  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // @ts-ignore
   apolloClient.toJSON = () => null;
 
   // Add apolloClient to NextPageContext & NextAppContext.
@@ -87,6 +94,23 @@ export const initOnContext = ctx => {
   return ctx;
 };
 
+interface PagePropsI {
+  client?: ApolloClient<NormalizedCacheObject>;
+}
+
+interface ApolloPropsI {
+  apolloClient: ApolloClient<NormalizedCacheObject>;
+  apolloState: NormalizedCacheObject;
+}
+
+interface NextPageContextWithApollo extends NextPageContext {
+  apolloClient: ApolloClient<NormalizedCacheObject> | null;
+  apolloState: NormalizedCacheObject;
+  ctx: NextPageContextApp;
+}
+
+type NextPageContextApp = NextPageContextWithApollo & AppContext;
+
 /**
  * Creates a withApollo HOC
  * that provides the apolloContext
@@ -95,25 +119,8 @@ export const initOnContext = ctx => {
  * @param  {Boolean} [withApolloOptions.ssr=false]
  * @returns {(PageComponent: ReactNode) => ReactNode}
  */
-
-interface InitPropsI {
-  getInitialProps: (...args) => {};
-}
-interface AppPropsI {
-  apolloClient: ApolloClient<NormalizedCacheObject>;
-}
-
-interface ApolloPropsI {
-  apolloClient: ApolloClient<NormalizedCacheObject>;
-  apolloState: NormalizedCacheObject;
-}
-
-export const withApollo = ({ ssr = false } = {}) => (Page: React.FunctionComponent<AppPropsI> & InitPropsI) => {
-  const WithApollo: React.FunctionComponent<ApolloPropsI> & InitPropsI = ({
-    apolloClient,
-    apolloState,
-    ...pageProps
-  }: ApolloPropsI) => {
+export const withApollo = ({ ssr = false } = {}) => (PageComponent: NextPage<ClientPropsI>) => {
+  const WithApollo = ({ apolloClient, apolloState, ...pageProps }: ApolloPropsI): ReactNode => {
     let client;
     if (apolloClient) {
       // Happens on: getDataFromTree & next.js ssr
@@ -125,26 +132,26 @@ export const withApollo = ({ ssr = false } = {}) => (Page: React.FunctionCompone
 
     return (
       <ApolloProvider client={client}>
-        <Page apolloClient={client} {...pageProps} />
+        <PageComponent client={client} {...pageProps} />
       </ApolloProvider>
     );
   };
 
   // Set the correct displayName in development
   if (process.env.NODE_ENV !== 'production') {
-    const displayName = Page.displayName || Page.name || 'Component';
+    const displayName = PageComponent.displayName || PageComponent.name || 'Component';
     WithApollo.displayName = `withApollo(${displayName})`;
   }
 
-  if (ssr || Page.getInitialProps) {
-    WithApollo.getInitialProps = async ctx => {
+  if (ssr || PageComponent.getInitialProps) {
+    WithApollo.getInitialProps = async (ctx: NextPageContextApp): Promise<object> => {
       const inAppContext = Boolean(ctx.ctx);
       const { apolloClient } = initOnContext(ctx);
 
       // Run wrapped getInitialProps methods
       let pageProps = {};
-      if (Page.getInitialProps) {
-        pageProps = await Page.getInitialProps(ctx);
+      if (PageComponent.getInitialProps) {
+        pageProps = await PageComponent.getInitialProps(ctx);
       } else if (inAppContext) {
         pageProps = await App.getInitialProps(ctx);
       }
