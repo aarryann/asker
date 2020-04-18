@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  api:
+    build: ./api
+    container_name: api
+    env_file: ./api/.env
+    expose: [4811]
+    extra_hosts:
+      - 'database:192.168.1.202'
+    ports:
+      - 4811:4811
+
+  app:
+    build: ./app
+    container_name: app
+    depends_on:
+      - api
+    env_file: ./app/.env
+    expose: [3000]
+    init: true
+    ports:
+      - '3000:3000'
