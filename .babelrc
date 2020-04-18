@@ -6,7 +6,14 @@
       {
         "root": ["./"],
         "alias": {
-          "@components": "./components"
+          "@components": "./components",
+          "@config": "./config",
+          "@lib": "./lib",
+          "@mocks": "./__mocks__",
+          "@pages": "./pages",
+          "@public": "./public",
+          "@tests": "./__tests__",
+          "@theme": "./theme"
         }
       }
     ]
