@@ -5,9 +5,9 @@ import { getMainDefinition } from 'apollo-utilities';
 import { OperationDefinitionNode } from 'graphql';
 
 export default function createApolloClient(initialState, ctx, token) {
-  const httpLink = new HttpLink({ uri: 'http://localhost:4811/graphql' });
+  const httpLink = new HttpLink({ uri: 'http://localhost:3000/graphql' });
   const wsLink = new WebSocketLink({
-    uri: 'ws://localhost:4811/graphql',
+    uri: 'ws://localhost:3000/graphql',
     options: {
       reconnect: true,
       lazy: true,
