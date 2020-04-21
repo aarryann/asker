@@ -1,0 +1,15 @@
+export default {
+  IS_SERVER: typeof window === 'undefined',
+  BUNDLE_ANALYZE: process.env.BUNDLE_ANALYZE,
+  NODE_ENV: process.env.NODE_ENV,
+  CUSTOM_ENV: process.env.CUSTOM_ENV,
+  PORT: process.env.PORT,
+  HOST: process.env.HOST,
+  IS_PROD: process.env.NODE_ENV === 'production',
+  GA_TRACKING_ID: process.env.GA_TRACKING_ID || 'XXX-XXX-XXX',
+  API_URL: process.env.API_URL,
+  SOCKET_URL: process.env.SOCKET_URL,
+  TOKEN_HANDLE: process.env.TOKEN_HANDLE,
+  TENANT_URL: process.env.TENANT_URL,
+  APP_SECRET: process.env.APP_SECRET,
+};

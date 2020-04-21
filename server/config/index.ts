@@ -20,4 +20,6 @@ export default {
   HOST: process.env.HOST,
   IS_PROD: process.env.NODE_ENV === 'production',
   BUNDLE_ANALYZE: process.env.BUNDLE_ANALYZE,
+  DB_URL: process.env.DB_URL,
+  APP_SECRET: process.env.APP_SECRET,
 };

@@ -1,12 +1,13 @@
-import { GraphQLLocalStrategy } from 'graphql-passport';
+import GraphqlLocalStrategy from 'graphql-passport';
 import { findUser } from './user';
 
-export const graphqlStrategy = new GraphQLLocalStrategy((username, password, done) => {
+export const graphqlStrategy = new GraphqlLocalStrategy((email, password, done) => {
+  console.log('GraphqlStrategy');
   findUser({ username, password })
-    .then(user => {
+    .then((user) => {
       done(null, user);
     })
-    .catch(error => {
+    .catch((error) => {
       done(error);
     });
 });

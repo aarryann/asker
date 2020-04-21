@@ -3,11 +3,13 @@ import * as ws from 'ws';
 import { WebSocketLink } from 'apollo-link-ws';
 import { getMainDefinition } from 'apollo-utilities';
 import { OperationDefinitionNode } from 'graphql';
+import Cookies from 'js-cookie';
+import config from '@clientconfig/index';
 
-export default function createApolloClient(initialState, ctx, token) {
-  const httpLink = new HttpLink({ uri: 'http://localhost:3000/graphql' });
+export default function createApolloClient(initialState, ctx) {
+  const httpLink = new HttpLink({ uri: config.API_URL });
   const wsLink = new WebSocketLink({
-    uri: 'ws://localhost:3000/graphql',
+    uri: config.SOCKET_URL,
     options: {
       reconnect: true,
       lazy: true,
@@ -25,8 +27,8 @@ export default function createApolloClient(initialState, ctx, token) {
       )
     : httpLink;
   const authLink = new ApolloLink((operation, forward) => {
-    // Retrieve the authorization token from local storage.
-    // const token = localStorage.getItem(process.env.ENV_TOKEN_NAME);
+    // Retrieve the authorization token
+    const token = Cookies.get(config.TOKEN_HANDLE);
 
     // Use the setContext method to set the HTTP headers.
     operation.setContext({
@@ -52,18 +54,4 @@ export default function createApolloClient(initialState, ctx, token) {
   };
 
   return new ApolloClient(clientOptions());
-}
-
-export function createApolloClient1(initialState, ctx) {
-  // The `ctx` (NextPageContext) will only be present on the server.
-  // use it to extract auth headers (ctx.req) or similar.
-  return new ApolloClient({
-    ssrMode: Boolean(ctx),
-    link: new HttpLink({
-      uri: 'https://api.graph.cool/simple/v1/cixmkt2ul01q00122mksg82pn', // Server URL (must be absolute)
-      credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
-      fetch,
-    }),
-    cache: new InMemoryCache().restore(initialState),
-  });
 }

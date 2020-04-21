@@ -1,14 +1,15 @@
 import { NextPage } from 'next';
 import { useState } from 'react';
 import Router from 'next/router';
-import { useMutation, getApolloContext } from '@apollo/react-hooks';
-import cookie from 'js-cookie';
+import { post } from '@lib/utils';
+// import { useMutation, getApolloContext } from '@apollo/react-hooks';
+// import cookie from 'js-cookie';
 import fetch from 'isomorphic-unfetch';
 import Layout from '@components/layout/Layout';
-import { login } from '@lib/auth';
-import { useUser } from '@lib/hooks';
+// import { login } from '@lib/auth';
+// import { useUser } from '@lib/hooks';
 import { withApollo } from '@lib/apollo';
-import { mutations, queries } from './queries.session';
+// import { mutations, queries } from './queries.session';
 
 const LoginPage: NextPage<ClientPropsI> = ({ client }) => {
   // useUser({ redirectTo: '/', redirectIfFound: true });
@@ -20,8 +21,31 @@ const LoginPage: NextPage<ClientPropsI> = ({ client }) => {
     setUserData({ ...userData, error: '' });
 
     const { email, password } = userData;
-    const url = '/api/login';
-
+    try {
+      const res = await post(`/api/login`, {
+        username: email,
+        password,
+      });
+      /*
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData),
+      });
+      */
+      console.log(res);
+      if (res.status === 200) {
+        Router.push('/');
+      } else {
+        throw new Error(await res.text());
+      }
+    } catch (error) {
+      console.error('You have an error in your code or there are Network issues.', error);
+      setUserData({ ...userData, error: error.message });
+    }
+    /*
+    // TODO: Tenant URL from config
     try {
       const payload = {
         mutation: mutations.login,
@@ -31,7 +55,7 @@ const LoginPage: NextPage<ClientPropsI> = ({ client }) => {
           url: 'http://localhost:3000',
         },
       };
-      console.log(client);
+      // console.log(client);
       const results = await client.mutate({
         mutation: payload.mutation,
         variables: payload.variables,
@@ -42,35 +66,8 @@ const LoginPage: NextPage<ClientPropsI> = ({ client }) => {
       const data = results.data.login;
       // tslint:disable-next-line:no-console
       console.log(JSON.stringify(results, null, ' '));
-      /*
-      const [loginMutation, { data, error: mutationError, called: mutationCalled }] = useMutation(mutations.login);
-      // await loginMutation({ variables: payload.variables });
-      if (mutationError) {
-        return { error: mutationError };
-      }
-      console.log('data');
-      console.log(`called: ${mutationCalled}`);
-      console.log(JSON.stringify(data, null, ' '));
-      */
-      const response = await fetch(url, {
-        method: 'POST',
-
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-      if (response.status === 200) {
-        const { token } = await response.json();
-        cookie.set('token', token, { expires: 1 });
-        // Router.push('/profile');
-      } else {
-        // eslint-disable-next-line
-        console.log('Login failed.');
-        // https://github.com/developit/unfetch#caveats
-        const error = new Error(await response.text());
-        // eslint-disable-next-line
-        error['response'] = response;
-        throw error;
-      }
+      cookie.set('token', data.token, { expires: 1 });
+      // Router.push('/profile');
     } catch (error) {
       // eslint-disable-next-line
       console.error('You have an error in your code or there are Network issues.', error);
@@ -78,8 +75,8 @@ const LoginPage: NextPage<ClientPropsI> = ({ client }) => {
       const { response } = error;
       setUserData({ ...userData, error: response ? response.statusText : error.message });
     }
+    */
   };
-
   return (
     <Layout>
       <div className="login">

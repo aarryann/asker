@@ -16,7 +16,8 @@
     "baseUrl": "./",
     "paths": {
       "@components/*": ["./components/*"],
-      "@config/*": ["./config/*"],
+      "@clientconfig/*": ["./config/*"],
+      "@serverconfig/*": ["./server/config/*"],
       "@lib/*": ["./lib/*"],
       "@mocks/*": ["./__mocks__/*"],
       "@pages/*": ["./pages/*"],
@@ -25,6 +26,6 @@
       "@theme/*": ["./theme/*"]
     }
   },
-  "exclude": ["node_modules", "dist", ".next", "out", "next.config.js"],
+  "exclude": ["node_modules", "dist", ".next", "out", "next.config.js", "pages/api/logina.js"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.json"]
 }

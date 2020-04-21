@@ -17,17 +17,10 @@ import typeDefs from './typedefs';
 import { getMe, knex, pubsub } from './helpers/utils';
 
 const { IS_PROD, CUSTOM_ENV, PORT } = config;
-
 const nextServer = nextApp({ dev: !IS_PROD });
-
 const handle = nextServer.getRequestHandler();
+
 nextServer.prepare().then(() => {
-  /*
-  const corsOptions = {
-    origin: "http://localhost:3000",
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-  };
-  */
   const whitelist = ['http://localhost:3000', 'http://localhost:4812', 'http://localhost:4811'];
   const corsOptions = {
     origin: (origin, callback) => {
@@ -56,7 +49,6 @@ nextServer.prepare().then(() => {
       if (req.headers && req.headers.host && req.headers.host.match && req.headers.host.match(/^www/) !== null) {
         res.redirect(`https://${req.headers.host.replace(/^www\./, '')}${req.url}`);
       }
-
       next();
     });
   }
@@ -69,7 +61,6 @@ nextServer.prepare().then(() => {
 
       return nextServer.serveStatic(req, res, filePath);
     }
-
     return next();
   });
 
@@ -83,39 +74,32 @@ nextServer.prepare().then(() => {
       path: error.path,
     }),
     context: async ({ req }) => {
-      let rbq = '';
-      if (req && req.body && req.body.query) {
-        rbq = req.body.query;
+      const rbq = (req && req.body && req.body.query) || '';
+      let ctx = { userId: 0, token: null, conn: null };
+      if (rbq.length > 1) {
+        const ignoreList = ['login', 'tenantByUrl', 'signup', 'IntrospectionQuery'];
+        let check = true;
+        for (let i = 0; i < ignoreList.length; i += 1) {
+          const word = ignoreList[i];
+          if (rbq.indexOf(word) >= 0) {
+            check = false;
+            break;
+          }
+        }
+        ctx = (check && { ...(await getMe(req)), conn: { knex, pubsub } }) || { ...ctx, conn: { knex, pubsub } };
       }
-      let userId = 0;
-      let token;
-      const ignoreList = ['login', 'tenantByUrl', 'signup', 'IntrospectionQuery'];
-      const result = (rbq.length > 1 && ignoreList.filter((word) => rbq.indexOf(word) === -1)) || [];
-      if (result.length > 0) {
-        ({ userId, token } = await getMe(req));
-      }
-      return { userId, token, conn: { knex, pubsub } };
+      return ctx;
     },
   });
   server.applyMiddleware({ app, path: '/graphql' });
 
   app.get('*', (req: Request, res: Response) => handle(req, res));
+  app.post('*', (req: Request, res: Response) => handle(req, res));
 
-  /*
-  app.listen(PORT, () => {
-    console.info(`\n App is served at ${PORT}\n`); // eslint-disable-line no-console
-  });
-  */
   const httpServer = createServer(app);
   server.installSubscriptionHandlers(httpServer);
-  app.listen({ port: PORT }, () => {
+  httpServer.listen({ port: PORT }, () => {
     console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`);
     console.log(`🚀 Subscriptions ready at ws://localhost:${PORT}${server.subscriptionsPath}`);
   });
-  /*
-  server.listen().then(({ url, subscriptionsUrl }) => {
-    console.log(`🚀 Server ready at ${url}`);
-    console.log(`🚀 Subscriptions ready at ${subscriptionsUrl}`);
-  });
-  */
 });

@@ -7,7 +7,8 @@
         "root": ["./"],
         "alias": {
           "@components": "./components",
-          "@config": "./config",
+          "@clientconfig": "./config",
+          "@serverconfig": "./server/config",
           "@lib": "./lib",
           "@mocks": "./__mocks__",
           "@pages": "./pages",

@@ -3,10 +3,10 @@ import { findUser } from './user';
 
 export const localStrategy = new Local.Strategy((username, password, done) => {
   findUser({ username, password })
-    .then(user => {
+    .then((user) => {
       done(null, user);
     })
-    .catch(error => {
+    .catch((error) => {
       done(error);
     });
 });

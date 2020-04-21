@@ -18,17 +18,23 @@ const authenticate: any = (method, req, res) =>
 passport.use(localStrategy);
 
 export default nextConnect()
-  .use(passport.initialize())
+  .use((req, res, next) => {
+    // Initialize mocked database
+    // Remove this after you add your own database
+    next();
+  })
+  .use(passport.initialize() as any)
   .post(async (req, res) => {
+    console.log('Login post');
     try {
-      const user = await authenticate('local', req, res);
+      const login = await authenticate('local', req, res);
       // session is the payload to save in the token, it may contain basic info about the user
-      const session = { ...user };
+      const { token } = login;
       // The token is a string with the encrypted session
-      const token = await encryptSession(session);
+      // const token = await encryptSession(session);
 
       setTokenCookie(res, token);
-      res.status(200).send({ done: true });
+      res.status(200).send({ done: true, status: 200 });
     } catch (error) {
       console.error(error);
       res.status(401).send(error.message);

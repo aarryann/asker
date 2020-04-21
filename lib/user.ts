@@ -1,4 +1,10 @@
-// import crypto from 'crypto'
+import ApolloClient from 'apollo-boost';
+import config from '@clientconfig/index';
+import { mutations } from './queries.session';
+
+const client = new ApolloClient({
+  uri: config.API_URL,
+});
 
 /**
  * User methods. The example doesn't contain a DB, but for real applications you must use a
@@ -23,5 +29,19 @@ export async function findUser({ username, password }) {
   // const hash = crypto.pbkdf2Sync(password, user.salt, 1000, 64, 'sha512').toString('hex')
   // const passwordsMatch = user.hash === hash
 
-  return { username, createdAt: Date.now() };
+  const payload = {
+    mutation: mutations.login,
+    variables: {
+      email: username,
+      password,
+      url: config.TENANT_URL,
+    },
+  };
+  // console.log(client);
+  const results = await client.mutate({
+    mutation: payload.mutation,
+    variables: payload.variables,
+  });
+  console.log(JSON.stringify(results, null, ' '));
+  return (results.errors && { errors: results.errors }) || results.data.login;
 }

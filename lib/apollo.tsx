@@ -2,30 +2,15 @@ import React, { ReactNode } from 'react';
 import App, { AppContext } from 'next/app';
 import { NextPage, NextPageContext } from 'next';
 import Head from 'next/head';
+import config from '@clientconfig/index';
 import { ApolloClient } from 'apollo-client';
-import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
-import { HttpLink } from 'apollo-link-http';
-import fetch from 'isomorphic-unfetch';
+import { NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { ApolloProvider } from '@apollo/react-hooks';
 import createApolloClient from './apolloClient';
 
 // On the client, we store the Apollo Client in the following variable.
 // This prevents the client from reinitializing between page transitions.
 let globalApolloClient: ApolloClient<NormalizedCacheObject> | null = null;
-
-export const createApolloClient2 = (initialState, ctx): ApolloClient<NormalizedCacheObject> => {
-  // The `ctx` (NextPageContext) will only be present on the server.
-  // use it to extract auth headers (ctx.req) or similar.
-  return new ApolloClient({
-    ssrMode: Boolean(ctx),
-    link: new HttpLink({
-      uri: 'http://localhost:3000/graphql', // Server URL (must be absolute)
-      // credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
-      fetch,
-    }),
-    cache: new InMemoryCache().restore(initialState),
-  });
-};
 
 /**
  * Always creates a new apollo client on the server
@@ -37,16 +22,15 @@ const initApolloClient = (
   initialState: NormalizedCacheObject,
   ctx: NextPageContext
 ): ApolloClient<NormalizedCacheObject> => {
-  const token = '6b075baf-a22f-48bd-8dcd-9b235ea23a8f';
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
   if (typeof window === 'undefined') {
-    return createApolloClient(initialState, ctx, token);
+    return createApolloClient(initialState, ctx);
   }
 
   // Reuse client on the client-side
   if (!globalApolloClient) {
-    globalApolloClient = createApolloClient(initialState, ctx, token);
+    globalApolloClient = createApolloClient(initialState, ctx);
   }
 
   return globalApolloClient;
@@ -63,7 +47,7 @@ export const initOnContext = (ctx: NextPageContextApp): NextPageContextApp => {
 
   // We consider installing `withApollo({ ssr: true })` on global App level
   // as antipattern since it disables project wide Automatic Static Optimization.
-  if (process.env.NODE_ENV === 'development') {
+  if (config.NODE_ENV === 'development') {
     if (inAppContext) {
       console.warn(
         'Warning: You have opted-out of Automatic Static Optimization due to `withApollo` in `pages/_app`.\n' +
@@ -93,10 +77,6 @@ export const initOnContext = (ctx: NextPageContextApp): NextPageContextApp => {
 
   return ctx;
 };
-
-interface PagePropsI {
-  client?: ApolloClient<NormalizedCacheObject>;
-}
 
 interface ApolloPropsI {
   apolloClient: ApolloClient<NormalizedCacheObject>;
@@ -138,7 +118,7 @@ export const withApollo = ({ ssr = false } = {}) => (PageComponent: NextPage<Cli
   };
 
   // Set the correct displayName in development
-  if (process.env.NODE_ENV !== 'production') {
+  if (config.NODE_ENV !== 'production') {
     const displayName = PageComponent.displayName || PageComponent.name || 'Component';
     WithApollo.displayName = `withApollo(${displayName})`;
   }
