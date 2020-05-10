@@ -1,4 +1,4 @@
-import { pubsub } from '../../helpers/utils';
+import { pubsub } from '../../lib/utils';
 
 export default {
   subjectAdded: {

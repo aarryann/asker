@@ -8,11 +8,11 @@
         "alias": {
           "@components": "./components",
           "@clientconfig": "./config",
-          "@serverconfig": "./server/config",
           "@lib": "./lib",
           "@mocks": "./__mocks__",
           "@pages": "./pages",
           "@public": "./public",
+          "@server": "./server",
           "@tests": "./__tests__",
           "@theme": "./theme"
         }

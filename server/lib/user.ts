@@ -1,9 +1,16 @@
-import ApolloClient from 'apollo-boost';
-import config from '@clientconfig/index';
+import ApolloClient from 'apollo-client';
+import { createHttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import fetch from 'node-fetch';
+import config from '@server/config';
 import { mutations } from './queries.session';
 
 const client = new ApolloClient({
-  uri: config.API_URL,
+  link: createHttpLink({
+    uri: config.API_URL,
+    fetch: fetch as any,
+  }),
+  cache: new InMemoryCache(),
 });
 
 /**
@@ -28,20 +35,18 @@ export async function findUser({ username, password }) {
   // const user = await DB.findUser(...)
   // const hash = crypto.pbkdf2Sync(password, user.salt, 1000, 64, 'sha512').toString('hex')
   // const passwordsMatch = user.hash === hash
-
   const payload = {
     mutation: mutations.login,
     variables: {
       email: username,
       password,
-      url: config.TENANT_URL,
+      url: config.APP_URL,
     },
   };
-  // console.log(client);
   const results = await client.mutate({
     mutation: payload.mutation,
     variables: payload.variables,
   });
-  console.log(JSON.stringify(results, null, ' '));
+  // console.log(JSON.stringify(results, null, ' '));
   return (results.errors && { errors: results.errors }) || results.data.login;
 }

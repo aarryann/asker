@@ -1,5 +1,5 @@
 import { serialize, parse } from 'cookie';
-import config from '@clientconfig/index';
+import config from '@server/config';
 
 const MAX_AGE = 60 * 60 * 8; // 8 hours
 

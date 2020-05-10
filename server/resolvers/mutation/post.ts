@@ -1,4 +1,4 @@
-import { getUserId } from '../../helpers/utils';
+import { getUserId } from '../../lib/utils';
 
 export default {
   async createDraft(_parent, { title, text }, ctx, info) {

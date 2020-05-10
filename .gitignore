@@ -28,6 +28,7 @@
 !next-env.d.ts
 !package-lock.json
 !package.json
+!start.ts
 !README.md
 !tsconfig.json
 !tsconfig.server.json

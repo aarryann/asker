@@ -8,6 +8,7 @@ export default function withMockRouter(tree: React.ReactElement, router: Partial
     pathname = '',
     query = {},
     asPath = '',
+    basePath = '',
     push = async () => true,
     replace = async () => true,
     reload = () => null,
@@ -37,6 +38,7 @@ export default function withMockRouter(tree: React.ReactElement, router: Partial
         beforePopState,
         isFallback,
         events,
+        basePath,
       }}
     >
       {tree}

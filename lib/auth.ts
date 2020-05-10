@@ -7,7 +7,7 @@ export const login = ({ token }) => {
   Router.push('/profile');
 };
 
-export const auth = ctx => {
+export const auth = (ctx) => {
   const { token } = nextCookie(ctx);
 
   // If there's no token, it means the user is not logged in.
