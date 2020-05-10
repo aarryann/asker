@@ -2,16 +2,10 @@ import { NextPage } from 'next';
 import { useState } from 'react';
 import Router from 'next/router';
 import { post } from '@lib/utils';
-// import { useMutation, getApolloContext } from '@apollo/react-hooks';
-// import cookie from 'js-cookie';
-import fetch from 'isomorphic-unfetch';
 import Layout from '@components/layout/Layout';
-// import { login } from '@lib/auth';
-// import { useUser } from '@lib/hooks';
 import { withApollo } from '@lib/apollo';
-// import { mutations, queries } from './queries.session';
 
-const LoginPage: NextPage<ClientPropsI> = ({ client }) => {
+const LoginPage: NextPage = () => {
   // useUser({ redirectTo: '/', redirectIfFound: true });
   const [userData, setUserData] = useState({ email: '', password: '', error: '' });
 
@@ -26,15 +20,6 @@ const LoginPage: NextPage<ClientPropsI> = ({ client }) => {
         username: email,
         password,
       });
-      /*
-      const res = await fetch('/api/login', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData),
-      });
-      */
-      console.log(res);
       if (res.status === 200) {
         Router.push('/');
       } else {
@@ -44,38 +29,6 @@ const LoginPage: NextPage<ClientPropsI> = ({ client }) => {
       console.error('You have an error in your code or there are Network issues.', error);
       setUserData({ ...userData, error: error.message });
     }
-    /*
-    // TODO: Tenant URL from config
-    try {
-      const payload = {
-        mutation: mutations.login,
-        variables: {
-          email,
-          password,
-          url: 'http://localhost:3000',
-        },
-      };
-      // console.log(client);
-      const results = await client.mutate({
-        mutation: payload.mutation,
-        variables: payload.variables,
-      });
-      if (results.error) {
-        return { error: results.error.message };
-      }
-      const data = results.data.login;
-      // tslint:disable-next-line:no-console
-      console.log(JSON.stringify(results, null, ' '));
-      cookie.set('token', data.token, { expires: 1 });
-      // Router.push('/profile');
-    } catch (error) {
-      // eslint-disable-next-line
-      console.error('You have an error in your code or there are Network issues.', error);
-
-      const { response } = error;
-      setUserData({ ...userData, error: response ? response.statusText : error.message });
-    }
-    */
   };
   return (
     <Layout>
