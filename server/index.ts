@@ -113,7 +113,7 @@ export default () => {
         return ctx;
       },
     });
-    server.applyMiddleware({ app, path: '/graphql' });
+    server.applyMiddleware({ app, path: `/${GRAPHQL_EXT}` });
 
     app.get('*', (req: Request, res: Response) => handle(req, res));
     app.post('*', (req: Request, res: Response) => handle(req, res));
