@@ -1,0 +1,7 @@
+{
+  "projects": {
+    ".docs": "https://github.com/aarryann/docex.git",
+    "data": "https://github.com/aarryann/sample-data.git",
+    "secrets": "https://github.com/aarryann/env.git"
+  }
+}
