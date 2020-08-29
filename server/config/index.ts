@@ -10,7 +10,7 @@ export const getBaseDir = () => {
 };
 export const getPathName = () => {
   const DIR = getBaseDir();
-  return `${DIR}/secrets/.env.${NODE_ENV}.${MODE_ENV}`;
+  return `${DIR}/secrets/env.${NODE_ENV}.${MODE_ENV}`;
 };
 if (!process.env.HOST) {
   config({ path: getPathName() });
