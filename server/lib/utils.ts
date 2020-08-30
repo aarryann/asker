@@ -9,13 +9,13 @@ export class AuthError extends Error {
   }
 }
 
-export const getMe = async (req) => {
+export const getMe = async (req: any) => {
   try {
     const Authorization = req.get('Authorization');
     const token = Authorization.replace('Bearer ', '');
     const {
       user: { userId },
-    } = jwt.verify(token, config.APP_SECRET);
+    }: any = jwt.verify(token, config.APP_SECRET!);
     return { userId, token };
   } catch (e) {
     throw new AuthError();
@@ -31,4 +31,4 @@ export const getKnex = () =>
     searchPath: ['knex', 'public'],
   });
 
-export const getUserId = (ctx) => ctx.userId;
+export const getUserId = (ctx: any) => ctx.userId;

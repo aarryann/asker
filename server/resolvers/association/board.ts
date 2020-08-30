@@ -3,43 +3,43 @@ import Board from '../../models/board';
 
 export default {
   Board: {
-    owner: async (board, _, ctx) => {
+    owner: async (board: any, _params: any, ctx: any) => {
       return Account.getUserDetails(ctx.conn.knex, board.owner);
     },
-    members: async (board, _, ctx) => {
+    members: async (board: any, _params: any, ctx: any) => {
       return Board.getBoardMembers(ctx.conn.knex, board.id);
     },
-    lists: async (board, _, ctx) => {
+    lists: async (board: any, _params: any, ctx: any) => {
       return Board.getListsForBoard(ctx.conn.knex, board.id);
     },
   },
 
   List: {
-    board: async (list, _, ctx) => {
+    board: async (list: any, _params: any, ctx: any) => {
       return Board.getBoardDetails(ctx.conn.knex, list.boardId);
     },
-    cards: async (list, _, ctx) => {
+    cards: async (list: any, _params: any, ctx: any) => {
       return Board.getCardsForList(ctx.conn.knex, list.id);
     },
   },
 
   Card: {
-    list: async (card, _, ctx) => {
+    list: async (card: any, _params: any, ctx: any) => {
       return Board.getListDetails(ctx.conn.knex, card.listId);
     },
-    members: async (card, _, ctx) => {
+    members: async (card: any, _params: any, ctx: any) => {
       return Board.getCardMembers(ctx.conn.knex, card.id);
     },
-    comments: async (card, _, ctx) => {
+    comments: async (card: any, _params: any, ctx: any) => {
       return Board.getCommentsForCard(ctx.conn.knex, card.id);
     },
   },
 
   Comment: {
-    user: async (comment, _, ctx) => {
+    user: async (comment: any, _params: any, ctx: any) => {
       return Account.getUserDetails(ctx.conn.knex, comment.userId);
     },
-    card: async (comment, _, ctx) => {
+    card: async (comment: any, _params: any, ctx: any) => {
       return Board.getCardDetails(ctx.conn.knex, comment.cardId);
     },
   },

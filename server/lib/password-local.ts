@@ -1,7 +1,7 @@
 import Local from 'passport-local';
 import { findUser } from './user';
 
-export const localStrategy = new Local.Strategy((username, password, done) => {
+export const localStrategy = new Local.Strategy((username: any, password: any, done: any) => {
   findUser({ username, password })
     .then((user) => {
       done(null, user);

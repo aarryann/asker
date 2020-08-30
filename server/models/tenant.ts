@@ -1,4 +1,4 @@
-const getTenantByUrl = async (knex, url) => {
+const getTenantByUrl = async (knex: any, url: any) => {
   try {
     const rows = await knex('Tenant as t')
       .innerJoin('TenantAddress as ta', 'ta.tenantId', 't.id')

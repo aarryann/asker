@@ -1,19 +1,19 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
-    "skipLibCheck": true,
-    "strict": false,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
+    "alwaysStrict": false,
+    "baseUrl": "./",
     "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "baseUrl": "./",
+    "lib": ["dom", "es2017"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "paths": {
       "@components/*": ["./components/*"],
       "@clientconfig/*": ["./config/*"],
@@ -24,8 +24,12 @@
       "@server/*": ["./server/*"],
       "@tests/*": ["./__tests__/*"],
       "@theme/*": ["./theme/*"]
-    }
+    },
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "esnext"
   },
-  "exclude": ["node_modules", "dist", ".next", "out", "next.config.js", "pages/api/logina.js"],
+  "exclude": ["node_modules", "dist", ".next", "out", "next.config.js"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.json"]
 }

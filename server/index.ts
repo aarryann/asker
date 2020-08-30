@@ -21,12 +21,12 @@ import { getMe, getKnex, pubsub } from './lib/utils';
 export default () => {
   const knex = getKnex();
   const {
-    API_URL,
-    APP_URL,
+    // API_URL,
+    // APP_URL,
     CERT,
     GRAPHQL_EXT,
     HOST,
-    IS_DEV,
+    // IS_DEV,
     IS_PROD,
     IS_SECURE,
     KEY,
@@ -34,8 +34,8 @@ export default () => {
     PORT,
     PROTOCOL,
     SOCKET_PROTOCOL,
-    SOCKET_URL,
-    TOKEN_HANDLE,
+    // SOCKET_URL,
+    // TOKEN_HANDLE,
   } = serverConfig;
 
   const nextServer = nextApp({ dev: !IS_PROD });
@@ -44,7 +44,7 @@ export default () => {
   nextServer.prepare().then(() => {
     const whitelist = ['http://localhost:4812', 'https://yoxye.org', 'https://yoxye.org:443', 'https://myserver.org'];
     const corsOptions = {
-      origin: (origin, callback) => {
+      origin: (origin: any, callback: any) => {
         if (whitelist.indexOf(origin) !== -1 || !origin) {
           callback(null, true);
         } else {
@@ -97,7 +97,7 @@ export default () => {
       }),
       context: async ({ req }) => {
         const rbq = (req && req.body && req.body.query) || '';
-        let ctx = { userId: 0, token: null, conn: null };
+        let ctx: Object = { userId: 0, token: null, conn: null };
         if (rbq.length > 1) {
           const ignoreList = ['login', 'tenantByUrl', 'signup', 'IntrospectionQuery'];
           let check = true;

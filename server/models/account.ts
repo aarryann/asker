@@ -2,13 +2,13 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import serverconfig from '../config';
 
-const getUserDetails = async (knex, id) => {
+const getUserDetails = async (knex: any, id: any) => {
   const rows = await knex('User').select('*').where('id', id);
 
   return rows[0];
 };
 
-const login = async (knex, email, password, url) => {
+const login = async (knex: any, email: any, password: any, url: any) => {
   try {
     const rows = await knex('Tenant as t')
       .innerJoin('TenantAddress as ta', 'ta.tenantId', 't.id')
@@ -24,7 +24,7 @@ const login = async (knex, email, password, url) => {
       throw new Error('Invalid email or password');
     }
     return {
-      token: jwt.sign({ user: { userId: user.id } }, serverconfig.APP_SECRET),
+      token: jwt.sign({ user: { userId: user.id } }, serverconfig.APP_SECRET!),
       userId: user.id,
     };
   } catch (e) {
@@ -32,7 +32,7 @@ const login = async (knex, email, password, url) => {
   }
 };
 
-const currentUser = async (knex, token) => {
+const currentUser = async (knex: any, token: any) => {
   // TODO: Maybe remove Session table later
   try {
     const rows = await knex('Session as s')
@@ -51,7 +51,7 @@ const currentUser = async (knex, token) => {
   }
 };
 
-const signup = async (knex, args, ctx) => {
+const signup = async (_knex: any, args: any, ctx: any) => {
   const password = await bcrypt.hash(args.password, 10);
   const user = await ctx.db.mutation.createUser({
     data: { ...args, password },
@@ -59,7 +59,7 @@ const signup = async (knex, args, ctx) => {
 
   return {
     userId: user.id,
-    token: jwt.sign({ userId: user.id }, serverconfig.APP_SECRET),
+    token: jwt.sign({ userId: user.id }, serverconfig.APP_SECRET!),
   };
 };
 

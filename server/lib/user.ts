@@ -18,7 +18,7 @@ const client = new ApolloClient({
  * db here, such as MongoDB, Fauna, SQL, etc.
  */
 
-export async function createUser({ username, password }) {
+export async function createUser({ username, _password }: any) {
   // Here you should create the user and save the salt and hashed password (some dbs may have
   // authentication methods that will do it for you so you don't have to worry about it):
   //
@@ -29,7 +29,7 @@ export async function createUser({ username, password }) {
   return { username, createdAt: Date.now() };
 }
 
-export async function findUser({ username, password }) {
+export async function findUser({ username, password }: any) {
   // Here you should lookup for the user in your DB and compare the password:
   //
   // const user = await DB.findUser(...)

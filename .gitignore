@@ -25,6 +25,7 @@
 !k8.yml
 !k8-service.yml
 !next-env.d.ts
+!next.config.js
 !package-lock.json
 !package.json
 !start.ts

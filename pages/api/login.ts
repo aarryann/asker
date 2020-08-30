@@ -1,7 +1,7 @@
 import passport from 'passport';
 import nextConnect from 'next-connect';
 import { localStrategy } from 'server/lib/password-local';
-import { encryptSession } from 'server/lib/iron';
+// import { encryptSession } from 'server/lib/iron';
 import { setTokenCookie } from 'server/lib/auth-cookies';
 
 const authenticate: any = (method, req, res) =>

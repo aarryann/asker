@@ -3,8 +3,8 @@ import config from '@server/config';
 
 const MAX_AGE = 60 * 60 * 8; // 8 hours
 
-export function setTokenCookie(res, token) {
-  const cookie = serialize(config.TOKEN_HANDLE, token, {
+export function setTokenCookie(res: any, token: any) {
+  const cookie = serialize(config.TOKEN_HANDLE!, token, {
     maxAge: MAX_AGE,
     expires: new Date(Date.now() + MAX_AGE * 1000),
     httpOnly: true,
@@ -16,8 +16,8 @@ export function setTokenCookie(res, token) {
   res.setHeader('Set-Cookie', cookie);
 }
 
-export function removeTokenCookie(res) {
-  const cookie = serialize(config.TOKEN_HANDLE, '', {
+export function removeTokenCookie(res: any) {
+  const cookie = serialize(config.TOKEN_HANDLE!, '', {
     maxAge: -1,
     path: '/',
   });
@@ -25,7 +25,7 @@ export function removeTokenCookie(res) {
   res.setHeader('Set-Cookie', cookie);
 }
 
-export function parseCookies(req) {
+export function parseCookies(req: any) {
   // For API Routes we don't need to parse the cookies.
   if (req.cookies) return req.cookies;
 
@@ -34,7 +34,7 @@ export function parseCookies(req) {
   return parse(cookie || '');
 }
 
-export function getTokenCookie(req) {
+export function getTokenCookie(req: any) {
   const cookies = parseCookies(req);
-  return cookies[config.TOKEN_HANDLE];
+  return cookies[config.TOKEN_HANDLE!];
 }

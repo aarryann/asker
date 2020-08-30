@@ -1,10 +1,10 @@
 import Visit from '../../models/visit';
 
 export default {
-  allSubjects: async (_, { studyId, siteId }, ctx) => {
+  allSubjects: async (_parent: any, { studyId, siteId }: any, ctx: any) => {
     return Visit.getAllSubjects(ctx.conn.knex, studyId, siteId, 1, ctx.userId);
   },
-  oneSubject: async (_, _a, ctx) => {
+  oneSubject: async (_parent: any, _params: any, ctx: any) => {
     return Visit.getAllSubjects(ctx.conn.knex, 1, 1, 1, ctx.userId);
   },
 };
