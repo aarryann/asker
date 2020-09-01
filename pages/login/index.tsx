@@ -10,7 +10,7 @@ const LoginPage: NextPage = () => {
   const [userData, setUserData] = useState({ email: '', password: '', error: '' });
 
   // eslint-disable-next-line
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
     setUserData({ ...userData, error: '' });
 
