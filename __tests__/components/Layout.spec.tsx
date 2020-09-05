@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Layout from '@components/layout/Layout';
+import Layout from '@components/layout/WBLayout';
 
 describe('Layout', () => {
   let wrapper;

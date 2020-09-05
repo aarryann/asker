@@ -1,0 +1,47 @@
+// - - settings
+// @font-face declarations, variables
+
+// - - - - - - - - - - - - - - - - - - -
+// - - @font-face
+// add fonts to project as needed by updating the $fonts map below in the following format -
+// 'font-family-name': 'font-weight'
+
+// $fonts: (
+//   'font-family-one': ('font-one-light', 'font-one-dark'),
+//   'font-family-two': ('font-two-light','font-two-medium')
+// )
+
+// @each $font-family, $font-weights in $fonts {
+//   @each $font-weight in $font-weights {
+//     @font-face {
+//       name: $font-weight
+//       src:
+//         url('/path/to/fonts/#{$font-family}/#{$font-weight}.eot?#iefix') format('embedded-opentype'),
+//         url('/path/to/fonts/#{$font-family}/#{$font-weight}.woff') format('woff'),
+//         url('/path/to/fonts/#{$font-family}/#{$font-weight}.ttf') format('truetype'),
+//         url('/path/to/fonts/#{$font-family}/#{$font-weight}.svg##{$font-weight}') format('svg')
+//     }
+//   }
+// }
+// - - - - - - - - - - - - - - - - - - -
+
+// - - typography
+$base-font-family: Roboto, 'Open Sans', sans-serif;
+$heading-font-family: Roboto, 'Open Sans', sans-serif;
+$base-font-size: 1em;
+
+// - - layout
+$base-line-height: 1.5;
+$heading-line-height: 1.2em;
+$base-border-radius: 3px;
+$base-spacing: $base-line-height * 1em;
+$small-spacing: $base-spacing / 2;
+$base-z-index: 0;
+
+// - - effects
+$form-box-shadow: none;
+$form-box-shadow-focus: none;
+
+// - - animations
+$base-duration: 150ms;
+$base-timing: ease;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import Layout from '@components/layout/Layout';
-import Index from '@pages/index';
+import Layout from '@components/layout/WBLayout';
+import Index from '@pages/welcome';
 import withMockRouter from '@mocks/utils.mock';
 
 describe('Index', () => {

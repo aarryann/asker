@@ -3,10 +3,9 @@ import App, { AppContext } from 'next/app';
 import { NextPage, NextPageContext } from 'next';
 import Head from 'next/head';
 import config from '@clientconfig/index';
-import { ApolloClient } from 'apollo-client';
-import { NormalizedCacheObject } from 'apollo-cache-inmemory';
+import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import { ApolloProvider } from '@apollo/react-hooks';
-import createApolloClient from './apolloClient';
+import { createApolloClient } from './apolloClient';
 
 // On the client, we store the Apollo Client in the following variable.
 // This prevents the client from reinitializing between page transitions.
@@ -20,17 +19,17 @@ let globalApolloClient: ApolloClient<NormalizedCacheObject> | null = null;
  */
 const initApolloClient = (
   initialState: NormalizedCacheObject,
-  ctx: NextPageContext
+  _ctx: NextPageContext | undefined
 ): ApolloClient<NormalizedCacheObject> => {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
   if (typeof window === 'undefined') {
-    return createApolloClient(initialState, ctx);
+    return createApolloClient(initialState);
   }
 
   // Reuse client on the client-side
   if (!globalApolloClient) {
-    globalApolloClient = createApolloClient(initialState, ctx);
+    globalApolloClient = createApolloClient(initialState);
   }
 
   return globalApolloClient;
@@ -151,22 +150,21 @@ export const withApollo = ({ ssr = false } = {}) => (PageComponent: NextPage<Cli
             // Import `@apollo/react-ssr` dynamically.
             // We don't want to have this in our client bundle.
             const { getDataFromTree } = await import('@apollo/react-ssr');
-
             // Since AppComponents and PageComponents have different context types
             // we need to modify their props a little.
-            let props;
-            if (inAppContext) {
-              props = { ...pageProps, apolloClient };
-            } else {
-              props = { pageProps: { ...pageProps, apolloClient } };
-            }
+            // let props;
+            // if (inAppContext) {
+            //   props = { ...pageProps, apolloClient };
+            // } else {
+            //   props = { pageProps: { ...pageProps, apolloClient } };
+            // }
 
             // Take the Next.js AppTree, determine which queries are needed to render,
             // and fetch them. This method can be pretty slow since it renders
             // your entire AppTree once for every query. Check out apollo fragments
             // if you want to reduce the number of rerenders.
             // https://www.apollographql.com/docs/react/data/fragments/
-            await getDataFromTree(<AppTree {...props} />);
+            await getDataFromTree(<AppTree pageProps={{ ...pageProps, apolloClient }} />);
           } catch (error) {
             // Prevent Apollo Client GraphQL errors from crashing SSR.
             // Handle them in components via the data.error prop:
@@ -183,7 +181,7 @@ export const withApollo = ({ ssr = false } = {}) => (PageComponent: NextPage<Cli
       return {
         ...pageProps,
         // Extract query data from the Apollo store
-        apolloState: apolloClient.cache.extract(),
+        apolloState: apolloClient?.cache.extract(),
         // Provide the client for ssr. As soon as this payload
         // gets JSON.stringified it will remove itself.
         apolloClient: ctx.apolloClient,

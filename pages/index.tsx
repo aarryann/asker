@@ -1,8 +1,15 @@
 // pages/index.tsx
+import Link from 'next/link';
 
-import { NextPage } from 'next';
-import Layout from '@components/layout/Layout';
-
-const Index: NextPage = () => <Layout>Welcome to WHATABYTE!</Layout>;
+const Index = () => {
+  return (
+    <>
+      Welcome to WHATABYTE!
+      <Link href="/login">
+        <a>Home</a>
+      </Link>
+    </>
+  );
+};
 
 export default Index;

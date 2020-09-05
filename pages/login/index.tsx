@@ -1,11 +1,9 @@
-import { NextPage } from 'next';
 import { useState } from 'react';
 import Router from 'next/router';
 import { post } from '@lib/utils';
-import Layout from '@components/layout/Layout';
-import { withApollo } from '@lib/apollo';
+import LoginLayout from '@components/layout/WBLayout';
 
-const LoginPage: NextPage = () => {
+const LoginPage = ({}: { Layout: any }) => {
   // useUser({ redirectTo: '/', redirectIfFound: true });
   const [userData, setUserData] = useState({ email: '', password: '', error: '' });
 
@@ -31,7 +29,7 @@ const LoginPage: NextPage = () => {
     }
   };
   return (
-    <Layout>
+    <>
       <div className="login">
         <form onSubmit={handleSubmit}>
           <label htmlFor="email">Login</label>
@@ -85,8 +83,10 @@ const LoginPage: NextPage = () => {
           color: brown;
         }
       `}</style>
-    </Layout>
+    </>
   );
 };
 
-export default withApollo({ ssr: true })(LoginPage);
+LoginPage.Layout = LoginLayout;
+
+export default LoginPage;

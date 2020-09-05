@@ -1,7 +1,6 @@
 import fetch from 'isomorphic-unfetch';
 
-export function post(endpoint, data) {
-  console.log('Inside utils');
+export function post(endpoint: string, data: Object) {
   return fetch(endpoint, {
     method: 'POST',
     credentials: 'include',
@@ -11,5 +10,3 @@ export function post(endpoint, data) {
     },
   }).then((r) => r.json());
 }
-
-export default {};

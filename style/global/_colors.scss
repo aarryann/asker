@@ -1,0 +1,53 @@
+// COLOR SCHEME - WHITE GRAY
+// - - - - - - - - - - - - - - - - - - -
+// - - colors
+$black: #12131a;
+$black-s1: #6a6c6f;
+$black-s2: #909295;
+$blue: #3498db;
+$blue-s1: #caeff7;
+$blue-s2: #00bbe0;
+$blue-s5: #f7f9fa;
+$blue-s6: #f8f9fb;
+$gray-s1: #f8f8fa;
+$gray-s2: #cdd4e0;
+$gray-s4: #eaeaea;
+$green: #2ecc71;
+$orange: #e67e22;
+$purple: #cdcfe6;
+$purple-s1: #7571f9;
+$red: #ce4639;
+$white: #ffffff;
+$yellow: #f1c40f;
+
+$background: $blue-s6;
+$on-background: $black-s1;
+$surface: $white;
+$on-surface: $black-s1;
+$primary: $purple-s1;
+$on-primary: $white;
+$secondary: $gray-s1;
+$on-secondary: $black-s1;
+$error: $red;
+$on-error: $white;
+$border-main: $gray-s2;
+
+$table-accent-bg: $secondary;
+
+$primary-t1: tint($primary, 10);
+$primary-t2: tint($primary, 20);
+$primary-s1: shade($primary, 10);
+$primary-s2: shade($primary, 20);
+$secondary-t1: tint($secondary, 10);
+$secondary-t2: tint($secondary, 20);
+$secondary-s1: shade($secondary, 10);
+$secondary-s2: shade($secondary, 20);
+
+$tags-colors: (
+  blue: $blue,
+  green: $green,
+  orange: $orange,
+  purple: $purple,
+  red: $red,
+  yellow: $yellow,
+);
