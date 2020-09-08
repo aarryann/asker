@@ -4,7 +4,7 @@ import { localStrategy } from 'server/lib/password-local';
 // import { encryptSession } from 'server/lib/iron';
 import { setTokenCookie } from 'server/lib/auth-cookies';
 
-const authenticate: any = (method, req, res) =>
+const authenticate: any = (method: any, req: any, res: any) =>
   new Promise((resolve, reject) => {
     passport.authenticate(method, { session: false }, (error, token) => {
       if (error) {
@@ -18,7 +18,7 @@ const authenticate: any = (method, req, res) =>
 passport.use(localStrategy);
 
 export default nextConnect()
-  .use((req, res, next) => {
+  .use((_req, _res, next) => {
     // Initialize mocked database
     // Remove this after you add your own database
     next();

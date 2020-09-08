@@ -57,7 +57,21 @@ export default () => {
     app.options('*', cors()); // include before other routes
     app.use('*', cors(corsOptions));
     app.enable('trust proxy');
-    app.use(helmet());
+    // app.use(helmet());
+    app.use(
+      helmet({
+        contentSecurityPolicy: {
+          directives: {
+            defaultSrc: ["'self' 'unsafe-eval' 'unsafe-inline'"],
+            scriptSrc: ["'self' 'unsafe-eval' 'unsafe-inline'", 'cdn.jsdelivr.net'],
+            styleSrc: ["'self' 'unsafe-eval' 'unsafe-inline'", 'cdn.jsdelivr.net'],
+            styleSrcElem: ["'self' 'unsafe-eval' 'unsafe-inline'", 'fonts.googleapis.com', 'cdn.jsdelivr.net'],
+            imgSrc: ["'self' 'unsafe-eval' 'unsafe-inline'", 'cdn.jsdelivr.net'],
+            fontSrc: ["'self' 'unsafe-eval' 'unsafe-inline'", 'fonts.googleapis.com', 'fonts.gstatic.com'],
+          },
+        },
+      })
+    );
 
     if (IS_PROD) {
       // compression should be setup in reverse proxy on the server,

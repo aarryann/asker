@@ -1,15 +1,31 @@
 // components/Layout.tsx
+import Nav from './Nav';
+import ProtectedNav from './ProtectedNav';
+import { gql, useQuery } from '@apollo/client';
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
+  const IS_LOGGED_IN = gql`
+    query IsUserLoggedIn {
+      isLoggedIn @client
+    }
+  `;
+  const { data } = useQuery(IS_LOGGED_IN);
+  const IsLoggedIn = () => (data.isLoggedIn ? <ProtectedNav /> : <Nav />);
+  // const [session, loading] = useSession();
+
+  // if (loading) return <div>....loading</div>;
+
+  // const NavComponent = session ? Nav : Nav;
   return (
     <>
+      <IsLoggedIn />
       <div className="container-fluid page-body-wrapper">
         <div className="main-panel">
           <div className="content-wrapper">{children}</div>
           <footer className="footer">
             <div className="d-sm-flex justify-content-center justify-content-sm-between">
               <span className="text-muted text-center text-sm-left d-block d-sm-inline-block">
-                Copyright © 2018
+                Copyright © 2021
                 <a href="https://www.llcaccelor.com/" target="_blank" className="text-muted">
                   Urbanui
                 </a>

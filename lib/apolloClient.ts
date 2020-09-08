@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { ApolloClient, ApolloLink, HttpLink, split, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
+import { ApolloClient, ApolloLink, gql, HttpLink, split, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
 import { WebSocketLink } from '@apollo/link-ws';
 import { getMainDefinition } from 'apollo-utilities';
 import { OperationDefinitionNode } from 'graphql';
@@ -32,7 +32,7 @@ const getApolloLinkSource = (): ApolloLink => {
 
   const authLink = new ApolloLink((operation, forward) => {
     // Retrieve the authorization token
-    const token = Cookies.get(<string>config.TOKEN_HANDLE);
+    const token = Cookies.get(config.TOKEN_HANDLE!);
 
     // Use the setContext method to set the HTTP headers.
     operation.setContext({
@@ -53,16 +53,36 @@ const getApolloLinkSource = (): ApolloLink => {
 };
 
 export const createApolloClient = (initialState: NormalizedCacheObject): ApolloClient<NormalizedCacheObject> => {
+  const typeDefs = gql`
+    extend type Query {
+      isLoggedIn: Boolean!
+    }
+  `;
   const clientOptions = () => {
     return {
       ssrMode: typeof window === 'undefined',
       link: getApolloLinkSource(),
-      cache: new InMemoryCache().restore(initialState),
+      cache: initialState ? cache.restore(initialState) : cache,
+      typeDefs,
     };
   };
 
   return new ApolloClient(clientOptions());
 };
+
+export const cache: InMemoryCache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        isLoggedIn() {
+          return isLoggedInVar();
+        },
+      },
+    },
+  },
+});
+
+export const isLoggedInVar = cache.makeVar<boolean>(!!Cookies.get(config.TOKEN_HANDLE!));
 
 export function initializeApollo(initialState: NormalizedCacheObject) {
   const _apolloClient: ApolloClient<NormalizedCacheObject> = apolloClient ?? createApolloClient(initialState);
