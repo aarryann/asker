@@ -34,9 +34,9 @@ export default nextConnect()
       // const token = await encryptSession(session);
 
       setTokenCookie(res, token);
-      res.status(200).send({ done: true, status: 200 });
+      // res.status(200).send({ done: true, status: 200 });
     } catch (error) {
       console.error(error);
-      res.status(401).send(error.message);
+      // res.status(401).send(error.message);
     }
   });

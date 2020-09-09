@@ -3,6 +3,7 @@ import { useRef } from 'react';
 const AC = ({ id, listSort, placeholder }: { id: string; listSort: String[]; placeholder: string }) => {
   const sArea: any = useRef(null);
   id += String.fromCharCode(Math.ceil(Math.random() * 20) + 64);
+  /*
   const dogs = new Bloodhound({
     datumTokenizer: Bloodhound.tokenizers.whitespace,
     queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -21,8 +22,9 @@ const AC = ({ id, listSort, placeholder }: { id: string; listSort: String[]; pla
     .pseudoInputArea(`#${id}-psuedo-input`)
     .bloodHound(dogs)
     .namespace('mtag');
-
-  mtag();
+  */
+  const mtag = () => {};
+  if (listSort) mtag();
 
   sArea.parentNode.removeChild(sArea);
 

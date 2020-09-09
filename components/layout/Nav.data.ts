@@ -1,6 +1,5 @@
-import { gql, useApolloClient, useMutation } from '@apollo/client';
-// import config from '@clientconfig/index';
-
+import { gql, useApolloClient } from '@apollo/client';
+declare const process: any;
 export const queries = {
   currentUser: gql`
     query {
@@ -37,8 +36,7 @@ const Actions = {
         variables: {
           email,
           password,
-          // url: config.APP_URL,
-          url: 'https://localhost:4812',
+          url: process.env.NEXT_PUBLIC_APP_URL,
         },
       };
       const results = await client.mutate({
@@ -51,7 +49,7 @@ const Actions = {
       const data = results.data.login;
       // tslint:disable-next-line:no-console
       console.log(JSON.stringify(results, null, ' '));
-      localStorage.setItem(config.TOKEN_HANDLE!, data.token);
+      localStorage.setItem(process.env.NEXT_PUBLIC_TOKEN_HANDLE!, data.token);
       Actions.setCurrentUser(data.user);
       return { data: data.user };
     } catch (e) {
@@ -60,7 +58,7 @@ const Actions = {
       return { error: e.message };
     }
   },
-  setCurrentUser: async (user: any) => {
+  setCurrentUser: async (_user: any) => {
     /*
     const socket = new Socket(process.env.REACT_APP_SOCKET_URL + '/socket', {
       params: {
@@ -90,7 +88,7 @@ const Actions = {
   */
   },
   signOut: (client: any) => {
-    const tokenName = process.env.REACT_APP_TOKEN_NAME;
+    const tokenName = process.env.NEXT_PUBLIC_TOKEN_HANDLE;
     if (localStorage.getItem(tokenName!)) {
       localStorage.removeItem(tokenName!);
     }

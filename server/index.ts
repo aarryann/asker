@@ -11,37 +11,28 @@ import http from 'http';
 import https from 'https';
 import cors from 'cors';
 import fs from 'fs';
+import path from 'path';
 
-import serverConfig, { getBaseDir } from './config';
 import httpRedirect from './lib/http-redirect';
 import resolvers from './resolvers';
 import typeDefs from './typedefs';
 import { getMe, getKnex, pubsub } from './lib/utils';
 
+declare const process: any;
 export default () => {
   const knex = getKnex();
-  const {
-    // API_URL,
-    // APP_URL,
-    CERT,
-    GRAPHQL_EXT,
-    HOST,
-    // IS_DEV,
-    IS_PROD,
-    IS_SECURE,
-    KEY,
-    MODE_ENV,
-    PORT,
-    PROTOCOL,
-    SOCKET_PROTOCOL,
-    // SOCKET_URL,
-    // TOKEN_HANDLE,
-  } = serverConfig;
+  const IS_PROD = process.env.NODE_ENV !== 'production';
+  const getBaseDir = () => {
+    return path.resolve(__dirname, process.env.NODE_ENV === 'production' ? '../../' : '../');
+  };
 
   const nextServer = nextApp({ dev: !IS_PROD });
   const handle = nextServer.getRequestHandler();
 
   nextServer.prepare().then(() => {
+    // Call only after nextServer is initialized
+    // prettier-ignore
+    const { CERT, GRAPHQL_EXT, HOST, KEY, MODE_ENV, PORT, PROTOCOL, SOCKET_PROTOCOL } = process.env;
     const whitelist = ['http://localhost:4812', 'https://yoxye.org', 'https://yoxye.org:443', 'https://myserver.org'];
     const corsOptions = {
       origin: (origin: any, callback: any) => {
@@ -147,7 +138,7 @@ export default () => {
       cert: fs.readFileSync(`${DIR}/secrets/${CERT}`, 'utf8'),
     });
 
-    const httpServer = IS_SECURE ? https.createServer(getCerts(), app) : http.createServer(app);
+    const httpServer = PROTOCOL === 'https' ? https.createServer(getCerts(), app) : http.createServer(app);
 
     server.installSubscriptionHandlers(httpServer);
     httpServer.listen({ port: PORT }, () => {

@@ -1,8 +1,8 @@
 import { PubSub } from 'apollo-server';
 import Knex from 'knex';
 import jwt from 'jsonwebtoken';
-import config from '../config';
 
+declare const process: any;
 export class AuthError extends Error {
   constructor() {
     super('Not authorized');
@@ -15,7 +15,7 @@ export const getMe = async (req: any) => {
     const token = Authorization.replace('Bearer ', '');
     const {
       user: { userId },
-    }: any = jwt.verify(token, config.APP_SECRET!);
+    }: any = jwt.verify(token, process.env.APP_SECRET!);
     return { userId, token };
   } catch (e) {
     throw new AuthError();
@@ -27,7 +27,7 @@ export const pubsub = new PubSub();
 export const getKnex = () =>
   Knex({
     client: 'pg',
-    connection: config.DB_URL,
+    connection: process.env.DB_URL,
     searchPath: ['knex', 'public'],
   });
 

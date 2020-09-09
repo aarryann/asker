@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import serverconfig from '../config';
 
+declare const process: any;
 const getUserDetails = async (knex: any, id: any) => {
   const rows = await knex('User').select('*').where('id', id);
 
@@ -24,7 +24,7 @@ const login = async (knex: any, email: any, password: any, url: any) => {
       throw new Error('Invalid email or password');
     }
     return {
-      token: jwt.sign({ user: { userId: user.id } }, serverconfig.APP_SECRET!),
+      token: jwt.sign({ user: { userId: user.id } }, process.env.APP_SECRET!),
       userId: user.id,
     };
   } catch (e) {
@@ -59,7 +59,7 @@ const signup = async (_knex: any, args: any, ctx: any) => {
 
   return {
     userId: user.id,
-    token: jwt.sign({ userId: user.id }, serverconfig.APP_SECRET!),
+    token: jwt.sign({ userId: user.id }, process.env.APP_SECRET!),
   };
 };
 

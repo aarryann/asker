@@ -1,13 +1,11 @@
-import ApolloClient from 'apollo-client';
-import { createHttpLink } from 'apollo-link-http';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 import fetch from 'node-fetch';
-import config from '@server/config';
 import { mutations } from './queries.session';
 
+declare const process: any;
 const client = new ApolloClient({
   link: createHttpLink({
-    uri: config.API_URL,
+    uri: process.env.NEXT_PUBLIC_API_URL,
     fetch: fetch as any,
   }),
   cache: new InMemoryCache(),
@@ -18,13 +16,14 @@ const client = new ApolloClient({
  * db here, such as MongoDB, Fauna, SQL, etc.
  */
 
-export async function createUser({ username, _password }: any) {
+export async function createUser({ username, password }: any) {
   // Here you should create the user and save the salt and hashed password (some dbs may have
   // authentication methods that will do it for you so you don't have to worry about it):
   //
   // const salt = crypto.randomBytes(16).toString('hex')
   // const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex')
   // const user = await DB.createUser({ username, salt, hash })
+  if (!password) password = '123';
 
   return { username, createdAt: Date.now() };
 }
@@ -40,7 +39,7 @@ export async function findUser({ username, password }: any) {
     variables: {
       email: username,
       password,
-      url: config.APP_URL,
+      url: process.env.NEXT_PUBLIC_APP_URL,
     },
   };
   const results = await client.mutate({

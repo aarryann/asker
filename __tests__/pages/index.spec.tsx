@@ -5,7 +5,7 @@ import Index from '@pages/welcome';
 import withMockRouter from '@mocks/utils.mock';
 
 describe('Index', () => {
-  let wrapper;
+  let wrapper: any;
 
   // eslint-disable-next-line
   beforeEach(() => (wrapper = shallow(<Index />)));
@@ -20,7 +20,7 @@ describe('Index', () => {
 });
 
 describe('Index children', () => {
-  let wrapper;
+  let wrapper: any;
   // eslint-disable-next-line
   beforeEach(() => (wrapper = mount(withMockRouter(<Index />))));
 

@@ -16,7 +16,7 @@
     "noUnusedParameters": true,
     "paths": {
       "@components/*": ["./components/*"],
-      "@clientconfig/*": ["./config/*"],
+      "@config/*": ["./config/*"],
       "@lib/*": ["./lib/*"],
       "@mocks/*": ["./__mocks__/*"],
       "@pages/*": ["./pages/*"],

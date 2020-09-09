@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-const Login = ({ isLogin, errorMessage, onSubmit }) => (
+const Login = ({ isLogin, errorMessage, onSubmit }: any) => (
   <form onSubmit={onSubmit}>
     <label>
       <span>Username</span>

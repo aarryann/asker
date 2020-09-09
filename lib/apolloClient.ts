@@ -5,14 +5,14 @@ import { getMainDefinition } from 'apollo-utilities';
 import { OperationDefinitionNode } from 'graphql';
 import Cookies from 'js-cookie';
 import * as ws from 'ws';
-import config from '@clientconfig/index';
 
+declare const process: any;
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 
 const getApolloLinkSource = (): ApolloLink => {
-  const httpLink = new HttpLink({ uri: config.API_URL, credentials: 'same-origin' });
+  const httpLink = new HttpLink({ uri: process.env.NEXT_PUBLIC_API_URL, credentials: 'same-origin' });
   const wsLink = new WebSocketLink({
-    uri: <string>config.SOCKET_URL,
+    uri: <string>process.env.NEXT_PUBLIC_SOCKET_URL,
     options: {
       reconnect: true,
       lazy: true,
@@ -32,7 +32,7 @@ const getApolloLinkSource = (): ApolloLink => {
 
   const authLink = new ApolloLink((operation, forward) => {
     // Retrieve the authorization token
-    const token = Cookies.get(config.TOKEN_HANDLE!);
+    const token = Cookies.get(process.env.NEXT_PUBLIC_TOKEN_HANDLE!);
 
     // Use the setContext method to set the HTTP headers.
     operation.setContext({
@@ -82,7 +82,7 @@ export const cache: InMemoryCache = new InMemoryCache({
   },
 });
 
-export const isLoggedInVar = cache.makeVar<boolean>(!!Cookies.get(config.TOKEN_HANDLE!));
+export const isLoggedInVar = cache.makeVar<boolean>(!!Cookies.get(process.env.NEXT_PUBLIC_TOKEN_HANDLE!));
 
 export function initializeApollo(initialState: NormalizedCacheObject) {
   const _apolloClient: ApolloClient<NormalizedCacheObject> = apolloClient ?? createApolloClient(initialState);

@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import Layout from '@components/layout/WBLayout';
 
 describe('Layout', () => {
-  let wrapper;
+  let wrapper: any;
   const appTitle = 'Test';
 
   // eslint-disable-next-line
