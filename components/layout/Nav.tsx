@@ -1,5 +1,22 @@
 // components/Layout.tsx
+import { useRef } from 'react';
+import Actions from './Nav.data';
+import { useApolloClient } from '@apollo/client';
+
 const Nav = () => {
+  const email = useRef<HTMLInputElement>(null);
+  const password = useRef<HTMLInputElement>(null);
+  const client = useApolloClient();
+  async function handleEditProfile(e: any) {
+    e.preventDefault();
+    console.log('Inside');
+    const body = {
+      email: email.current!.value,
+      password: password.current!.value,
+    };
+    const r = await Actions.signIn(client, body.email, body.password);
+    console.log(r);
+  }
   return (
     <>
       <div className="horizontal-menu">
@@ -15,9 +32,10 @@ const Nav = () => {
             </div>
             <div className="navbar-menu-wrapper d-flex align-items-center justify-content-end">
               <h2 className="sitename mr-auto">Electronic Data Capture</h2>
-              <form className="form-inline mt-2 mt-md-0">
+              <form onSubmit={handleEditProfile} className="form-inline mt-2 mt-md-0">
                 <input
                   name="username"
+                  ref={email}
                   className="form-control mr-sm-2"
                   type="text"
                   placeholder="email"
@@ -25,6 +43,7 @@ const Nav = () => {
                 />
                 <input
                   name="password"
+                  ref={password}
                   className="form-control mr-sm-2"
                   type="password"
                   placeholder="password"

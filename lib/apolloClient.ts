@@ -6,7 +6,6 @@ import { OperationDefinitionNode } from 'graphql';
 import Cookies from 'js-cookie';
 import * as ws from 'ws';
 
-declare const process: any;
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 
 const getApolloLinkSource = (): ApolloLink => {

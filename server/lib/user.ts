@@ -2,7 +2,6 @@ import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 import fetch from 'node-fetch';
 import { mutations } from './queries.session';
 
-declare const process: any;
 const client = new ApolloClient({
   link: createHttpLink({
     uri: process.env.NEXT_PUBLIC_API_URL,

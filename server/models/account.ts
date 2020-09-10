@@ -1,7 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-declare const process: any;
 const getUserDetails = async (knex: any, id: any) => {
   const rows = await knex('User').select('*').where('id', id);
 

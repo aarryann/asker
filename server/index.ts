@@ -18,9 +18,7 @@ import resolvers from './resolvers';
 import typeDefs from './typedefs';
 import { getMe, getKnex, pubsub } from './lib/utils';
 
-declare const process: any;
 export default () => {
-  const knex = getKnex();
   const IS_PROD = process.env.NODE_ENV !== 'production';
   const getBaseDir = () => {
     return path.resolve(__dirname, process.env.NODE_ENV === 'production' ? '../../' : '../');
@@ -91,6 +89,7 @@ export default () => {
       return next();
     });
 
+    const knex = getKnex();
     const server = new ApolloServer({
       typeDefs,
       resolvers,

@@ -1,5 +1,4 @@
-import { gql, useApolloClient } from '@apollo/client';
-declare const process: any;
+import { gql } from '@apollo/client';
 export const queries = {
   currentUser: gql`
     query {
@@ -27,9 +26,10 @@ export const mutations = {
 };
 
 const Actions = {
-  signIn: async (email: string, password: string) => {
+  signIn: async (c: any, email: string, password: string) => {
     try {
-      const client = useApolloClient();
+      console.log('before');
+      console.log(process.env.NEXT_PUBLIC_APP_URL);
       // client.clearStore();
       const payload = {
         mutation: mutations.login,
@@ -39,7 +39,8 @@ const Actions = {
           url: process.env.NEXT_PUBLIC_APP_URL,
         },
       };
-      const results = await client.mutate({
+      console.log(payload);
+      const results = await c.mutate({
         mutation: payload.mutation,
         variables: payload.variables,
       });

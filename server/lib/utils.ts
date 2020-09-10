@@ -2,7 +2,6 @@ import { PubSub } from 'apollo-server';
 import Knex from 'knex';
 import jwt from 'jsonwebtoken';
 
-declare const process: any;
 export class AuthError extends Error {
   constructor() {
     super('Not authorized');
