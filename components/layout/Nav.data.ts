@@ -26,10 +26,8 @@ export const mutations = {
 };
 
 const Actions = {
-  signIn: async (c: any, email: string, password: string) => {
+  signIn: async (client: any, email: string, password: string) => {
     try {
-      console.log('before');
-      console.log(process.env.NEXT_PUBLIC_APP_URL);
       // client.clearStore();
       const payload = {
         mutation: mutations.login,
@@ -39,8 +37,7 @@ const Actions = {
           url: process.env.NEXT_PUBLIC_APP_URL,
         },
       };
-      console.log(payload);
-      const results = await c.mutate({
+      const results = await client.mutate({
         mutation: payload.mutation,
         variables: payload.variables,
       });

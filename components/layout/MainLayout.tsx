@@ -39,7 +39,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
           </footer>
         </div>
       </div>
-      <style jsx lang="scss">{`
+      <style jsx>{`
         @import './style/global/index';
         .content-wrapper {
           background-color: $background;

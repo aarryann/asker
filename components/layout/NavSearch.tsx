@@ -5,7 +5,7 @@ const NavSearch = ({ placeholder }: { placeholder: string }) => {
   return (
     <>
       <Ac id="navsearch" listSort={sortData} placeholder={placeholder} />
-      <style jsx lang="scss">{`
+      <style jsx>{`
         @import './style/global/index';
         :global(#navsearch-tag-list) {
           border: 0;

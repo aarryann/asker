@@ -17,7 +17,7 @@ const SidebarLeft = () => {
           <div className="ps__thumb-y" />
         </div>
       </nav>
-      <style jsx lang="scss">{`
+      <style jsx>{`
         @import '../../style/global/index';
         .sidebar {
           width: 180px !important;

@@ -41,7 +41,7 @@ const AC = ({ id, listSort, placeholder }: { id: string; listSort: String[]; pla
         </ul>
       </div>
       <div className="dsm-mt-typeahead-suggestion-area" id={id + '-typeahead-suggestions'} ref={sArea} />
-      <style jsx global lang="scss">{`
+      <style jsx global>{`
         @import './style/global/index';
         .c-ac-width {
           min-width: 40%;

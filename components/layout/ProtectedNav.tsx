@@ -169,7 +169,7 @@ const ProtectedNav = () => {
           </button>
         </div>
       </nav>
-      <style jsx lang="scss">{`
+      <style jsx>{`
         .navbar {
           border-bottom: 1px solid #eaeaea;
           .navbar-brand-wrapper {

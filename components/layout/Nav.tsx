@@ -9,7 +9,7 @@ const Nav = () => {
   const client = useApolloClient();
   async function handleEditProfile(e: any) {
     e.preventDefault();
-    console.log('Inside');
+    email.current?.focus();
     const body = {
       email: email.current!.value,
       password: password.current!.value,
@@ -85,7 +85,7 @@ const Nav = () => {
           </div>
         </nav>
       </div>
-      <style jsx lang="scss">{`
+      <style jsx>{`
         h2 {
           &.sitename {
             font-weight: 700;
